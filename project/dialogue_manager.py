@@ -26,7 +26,7 @@ class ThreadRanker(object):
         #### YOUR CODE HERE ####
         question_vec = question_to_vec(question, self.word_embeddings, self.embeddings_dim).reshape(1, -1)
         #### YOUR CODE HERE ####
-        best_thread = pairwise_distances_argmin(question_vec, thread_embeddings)[0]
+        best_thread = pairwise_distances_argmin(question_vec, thread_embeddings, metric='cosine')[0]
         
         return thread_ids.iloc[best_thread]
 
@@ -60,7 +60,6 @@ class DialogueManager(object):
         ########################
         
         self.chitchat_bot = ChatBot('Pseudo Leena', trainer='chatterbot.trainers.ChatterBotCorpusTrainer')
-
         self.chitchat_bot.train("chatterbot.corpus.english")
 
        
@@ -92,7 +91,7 @@ class DialogueManager(object):
             
             # Pass prepared_question to thread_ranker to get predictions.
             #### YOUR CODE HERE ####
-            thread_id = self.thread_ranker.get_best_thread(question, tag)
+            thread_id = self.thread_ranker.get_best_thread(prepared_question, tag)
            
             return self.ANSWER_TEMPLATE % (tag, thread_id)
 
